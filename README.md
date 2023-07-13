@@ -4,12 +4,14 @@
 - [Getting started video](https://www.youtube.com/watch?v=GWiAQs4-UQ0)
 - [cheat sheet](docs/cheat-sheet.pdf)
 
-## Instructions
+## Parameters
 
 - `rd` is a destination register.
 - `rs1` and `rs2` are source registers.
 - `imm` is an immediate value, which is a constant value encoded within the instruction itself.
 - `offset` is also an immediate value, but it is used specifically for calculating memory addresses or branch targets.
+
+## Instructions
 
 | Instruction | Format | Parameter Count | Parameter Types | Description |
 | ----------- | -------- | --------------- | --------------- | ----------- |
@@ -54,6 +56,6 @@
 | ECALL | I-type | 0 | None | Environment Call. |
 | EBREAK | I-type | 0 | None | Environment Break. |
 
-This is just a basic description of the parameter types. Each instruction will interpret its parameters differently according to its semantics. For example, for the `SLLI`, `SRLI`, and `SRAI` instructions, the `imm` parameter is interpreted as the number of places to shift. But for the `ADDI` instruction, the `imm` parameter is simply an integer value to add to `rs1`. And for all the branch and jump instructions, the `offset` parameter is used as part of a memory address calculation. 
+Each instruction will interpret its parameters differently according to its semantics. For example, for the `SLLI`, `SRLI`, and `SRAI` instructions, the `imm` parameter is interpreted as the number of places to shift. But for the `ADDI` instruction, the `imm` parameter is simply an integer value to add to `rs1`. And for all the branch and jump instructions, the `offset` parameter is used as part of a memory address calculation. 
 
 Note that the number of parameters does not include the opcode itself. All RISC-V instructions have an opcode that is used to determine what operation to perform. These opcodes are typically not counted as parameters since they are part of the instruction itself.
