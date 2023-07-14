@@ -127,3 +127,12 @@ Sure! Here's a new table that includes examples of each instruction's usage. For
 | ECALL | `ecall` | Makes a system call. |
 | EBREAK | `ebreak` | Triggers a breakpoint exception. |
 
+## Commands
+
+``` bash 
+  # build and create inspectable elf
+  make
+
+  # run
+  qemu-riscv64 ./dist
+```

@@ -4,7 +4,8 @@
   "features": {
     "ghcr.io/jungaretti/features/make": {},
     "ghcr.io/Loag/gcc-riscv64-linux-gnu-feature/gcc-riscv64-linux-gnu:0": {},
-    "ghcr.io/Loag/qemu-system-misc-feature/qemu-system-misc:0": {}
+    "ghcr.io/Loag/qemu-system-misc-feature/qemu-system-misc:0": {},
+    "ghcr.io/loag/qemu-user-feature/qemu-user:0": {}
   },
   "customizations": {
     "vscode": {
