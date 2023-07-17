@@ -116,9 +116,7 @@ Sure! Here's a new table that includes examples of each instruction's usage. For
 | SLL | `sll x5, x6, x7` | Shifts the value in x6 left by the number of places specified in x7, and stores the result in x5. |
 | SLT | `slt x5, x6, x7` | If the value in x6 is less than the value in x7, sets x5 to 1. Otherwise, sets x5 to 0. |
 | SLTU | `sltu x5, x6, x7` | If the value in x6 is less than the value in x7 when both are treated as unsigned, sets x5 to 1. Otherwise, sets x5 to 0. |
-| XOR | `xor x5, x6, x7` | Performs bitwise XOR between the
-
- values in x6 and x7, and stores the result in x5. |
+| XOR | `xor x5, x6, x7` | Performs bitwise XOR between the values in x6 and x7, and stores the result in x5. |
 | SRL | `srl x5, x6, x7` | Shifts the value in x6 right by the number of places specified in x7 (treating the value as unsigned), and stores the result in x5. |
 | SRA | `sra x5, x6, x7` | Shifts the value in x6 right by the number of places specified in x7 (treating the value as signed), and stores the result in x5. |
 | OR | `or x5, x6, x7` | Performs bitwise OR between the values in x6 and x7, and stores the result in x5. |
