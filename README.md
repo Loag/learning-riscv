@@ -107,13 +107,13 @@ Please remember, these are typical mappings and the exact mappings can vary. For
 | `x2` / `sp` | `addi sp, sp, -16 # Decrease stack pointer by 16 bytes` | Stack pointer register. Points to the top of the stack. |
 | `x3` / `gp` | `lw x5, offset(gp) # Load global variable value into x5` | Global pointer register. Base pointer for global variables. |
 | `x4` / `tp` | Specific to OS/runtime environment. | Thread pointer register. Used for thread-local storage. |
-| `x5-x7` / `t0-t2` | `add t0, x5, x6 # Add x5 and x6, store result in t0` | Temp registers for short-lived values. |
+| `x5-x7` / `t0-t2` | `add t0, x5, x6 # Add x5 and x6, store result in t0` | Temp registers for short-lived values. use inside routine. |
 | `x8` / `s0` or `fp` | `sw fp, 0(sp) # Save frame pointer to the stack` | Saved register or frame pointer. |
-| `x9` / `s1` | `sw s1, -4(sp) # Save s1 to the stack` | Saved register. |
+| `x9` / `s1` | `sw s1, -4(sp) # Save s1 to the stack` | Saved register. use across routines. |
 | `x10-x11` / `a0-a1` | `add a0, a1, a2 # Add a1 and a2, result is return value in a0` | Used for function arguments and return values. |
 | `x12-x17` / `a2-a7` | `add a3, a4, a5 # Add a4 and a5, store result in a3 for function call` | Used for function arguments. |
-| `x18-x27` / `s2-s11` | `sw s2, -8(sp) # Save s2 to the stack` | Saved registers. |
-| `x28-x31` / `t3-t6` | `add t3, x5, x6 # Add x5 and x6, store result in t3` | Temp registers for short-lived values. |
+| `x18-x27` / `s2-s11` | `sw s2, -8(sp) # Save s2 to the stack` | Saved registers. use across routines.|
+| `x28-x31` / `t3-t6` | `add t3, x5, x6 # Add x5 and x6, store result in t3` | Temp registers for short-lived values. use inside routine. |
 
 ## Examples
 
