@@ -1,8 +1,8 @@
 # learning-riscv
 
-- [Risc V asm docs](https://riscv-programming.org/book/riscv-book.html)
-- [Getting started video](https://www.youtube.com/watch?v=GWiAQs4-UQ0)
-- [cheat sheet](docs/cheat-sheet.pdf)
+## Overview
+
+- Use pseudo instructions over regular instructions for clarity and ease of use.
 
 ## Parameters
 
@@ -10,6 +10,24 @@
 - `rs1` and `rs2` are source registers.
 - `imm` is an immediate value, which is a constant value encoded within the instruction itself.
 - `offset` is also an immediate value, but it is used specifically for calculating memory addresses or branch targets.
+
+## instruction types
+
+RISC-V uses several different instruction formats. Each format is used for a specific type of operation based on the number of operands, the type of operands, and the size of the operands. Here are the primary types of instructions:
+
+1. **R-type**: These are used for register-register operations like arithmetic and logical operations. They include three register operands - source register 1 (rs1), source register 2 (rs2), and destination register (rd). They also include a 7-bit opcode, and two additional fields (funct7 and funct3) that together with the opcode determine the exact operation to be performed.
+
+2. **I-type**: These are used for register-immediate operations, load operations, and some system instructions. They include a source register (rs1), a destination register (rd), a 12-bit immediate value, and a 7-bit opcode. An additional funct3 field together with the opcode determine the exact operation.
+
+3. **S-type**: These are used for store instructions. They include two source registers (rs1 and rs2) and a 12-bit immediate value, which is used to calculate the memory address. An opcode and a funct3 field determine the exact operation.
+
+4. **B-type**: These are used for branch instructions. They include two source registers (rs1 and rs2) and a 13-bit immediate value which is used to determine the branch target if the condition is true. An opcode and a funct3 field determine the exact condition for the branch.
+
+5. **U-type**: These are used for operations that require a 20-bit immediate value. They include a destination register (rd), a 20-bit immediate value, and a 7-bit opcode. U-type instructions include LUI (load upper immediate) and AUIPC (add upper immediate to pc).
+
+6. **J-type**: These are used for jump-and-link instructions. They include a destination register (rd), a 20-bit immediate value which is used to determine the jump target, and a 7-bit opcode.
+
+In each of these types, the opcode is the primary field that determines the category of the instruction (arithmetic, load/store, jump, etc.), while the funct3 and (if present) funct7 fields further specify the exact operation within that category. The "source" and "destination" registers refer to the registers from which the instruction reads its operands and where it stores its result, respectively. The immediate values are constants encoded directly in the instruction.
 
 ## Instructions
 
@@ -60,8 +78,25 @@ Each instruction will interpret its parameters differently according to its sema
 
 Note that the number of parameters does not include the opcode itself. All RISC-V instructions have an opcode that is used to determine what operation to perform. These opcodes are typically not counted as parameters since they are part of the instruction itself.
 
+## Pseudo instructions
 
-Sure! Here's a new table that includes examples of each instruction's usage. For the sake of these examples, register names like x1, x2, x3, etc. are used. Note that RISC-V has designated uses for certain register names (like x0 always holding the value 0, x1 typically used for return addresses, etc.), but these examples don't specifically stick to those conventions.
+Pseudo instructions in RISC-V assembly language are high-level instructions that do not map directly onto machine language instructions. They are implemented as a combination of one or more actual (or "real") machine instructions.
+
+| Instruction | Format           | Parameter Count | Parameter Types        | Description  |
+|-------------|------------------|-----------------|------------------------|--------------|
+| `li`        | I-type, U-type   | 2               | Register, Immediate    | Load the immediate value `imm` into register `rd`. |
+| `mv`        | I-type           | 2               | Register, Register     | Move the contents from `rs` to `rd`. |
+| `nop`       | I-type           | 0               | N/A                    | No operation. Used to provide a delay for a certain amount of time. |
+| `not`       | I-type, R-type   | 2               | Register, Register     | Bitwise NOT of `rs` into `rd`. |
+| `neg`       | R-type           | 2               | Register, Register     | Negates `rs` into `rd`. |
+| `beqz`      | B-type           | 2               | Register, Label        | Branch to `label` if `rs` equals zero. |
+| `bnez`      | B-type           | 2               | Register, Label        | Branch to `label` if `rs` not equals zero. |
+| `j`         | J-type           | 1               | Label                  | Unconditional jump to `label`. |
+| `jr`        | I-type           | 1               | Register               | Jump to the address in `rs`. |
+| `ret`       | I-type           | 0               | N/A                    | Return from subroutine. |
+| `call`      | J-type           | 1               | Label                  | Call subroutine at `label`. |
+
+Please remember, these are typical mappings and the exact mappings can vary. For instance, a `li` operation with a small immediate value might be replaced with a single I-type `addi` instruction, whereas a `li` operation with a larger immediate value might be replaced with a U-type `lui` instruction followed by an I-type `addi` instruction.
 
 ## Registers
 
@@ -81,6 +116,8 @@ Sure! Here's a new table that includes examples of each instruction's usage. For
 | `x28-x31` / `t3-t6` | `add t3, x5, x6 # Add x5 and x6, store result in t3` | Temp registers for short-lived values. |
 
 ## Examples
+
+### Instructions
 
 | Instruction | Example | Description |
 | ----------- | ------- | ----------- |
@@ -124,6 +161,32 @@ Sure! Here's a new table that includes examples of each instruction's usage. For
 | FENCE | `fence` | Ensures that all load and store instructions that appear before the FENCE in program order complete before any that come after. |
 | ECALL | `ecall` | Makes a system call. |
 | EBREAK | `ebreak` | Triggers a breakpoint exception. |
+
+### Pseudo Instructions
+
+
+| Pseudo-Instruction | Usage               | Description  |
+|--------------------|---------------------|--------------|
+| `li rd, imm`       | `li a1, 100`        | Load the immediate value `imm` into register `rd`. Depending on the value of the immediate, it might use `lui` and `addi` instructions. |
+| `mv rd, rs`        | `mv a1, a2`         | Move the contents from `rs` to `rd`. It is implemented as `addi rd, rs, 0`. |
+| `nop`              | `nop`               | No operation. It is used to provide a delay for certain amount of time. It is implemented as `addi x0, x0, 0`. |
+| `not rd, rs`       | `not a1, a2`        | Bitwise NOT of `rs` into `rd`. It is implemented using `xori rd, rs, -1`. |
+| `neg rd, rs`       | `neg a1, a2`        | Negates `rs` into `rd`. Implemented using `sub rd, x0, rs`. |
+| `beqz rs, label`   | `beqz a1, loop`     | Branch to `label` if `rs` equals zero. Implemented as `beq rs, x0, label`. |
+| `bnez rs, label`   | `bnez a1, loop`     | Branch to `label` if `rs` not equals zero. Implemented as `bne rs, x0, label`. |
+| `j label`          | `j loop`            | Unconditional jump to `label`. Implemented as `jal x0, label`. |
+| `jr rs`            | `jr a1`             | Jump to the address in `rs`. Implemented as `jalr x0, 0(rs)`. |
+| `ret`              | `ret`               | Return from subroutine. Implemented as `jalr x0, 0(ra)`. |
+| `call label`       | `call myFunction`   | Call subroutine at `label`. Implemented as `jal ra, label`. |
+
+Remember, each of these pseudo-instructions are ultimately replaced with the underlying machine instructions before the code is executed. Also, the exact underlying instructions can vary depending on the specific implementation of the RISC-V architecture or the assembler in use.
+
+## Documentation
+
+- [Risc V asm docs](https://riscv-programming.org/book/riscv-book.html)
+- [Getting started video](https://www.youtube.com/watch?v=GWiAQs4-UQ0)
+- [cheat sheet](docs/cheat-sheet.pdf)
+
 
 ## Commands
 
